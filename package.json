@@ -1,0 +1,17 @@
+{
+  "name": "edupulse-app",
+  "version": "1.0.0",
+  "description": "Early-warning student risk dashboard with faculty and student portals",
+  "main": "server.js",
+  "scripts": {
+    "start": "node --experimental-sqlite server.js"
+  },
+  "engines": {
+    "node": ">=22.5.0"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "express-session": "^1.18.0",
+    "bcryptjs": "^2.4.3"
+  }
+}

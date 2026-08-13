@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EduPulse AI — Preview</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  :root{
+    --primary:#4f46e5; --primary-dark:#4338ca;
+    --success:#10b981; --success-bg:#ecfdf5;
+    --warning:#f59e0b; --warning-bg:#fffbeb;
+    --danger:#ef4444; --danger-bg:#fef2f2;
+    --bg-main:#f8fafc; --bg-card:#ffffff;
+    --text-main:#1e293b; --text-muted:#64748b; --border:#e2e8f0;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;font-family:'Inter',sans-serif;}
+  a{color:inherit;}
+  body{background:var(--bg-main);color:var(--text-main);min-height:100vh;}
+  button, input{font-family:inherit;}
+  :focus-visible{outline:2px solid var(--primary);outline-offset:2px;}
+
+  /* ---------- Preview banner ---------- */
+  .preview-banner{
+    background:#111827;color:#e5e7eb;font-size:.78rem;
+    padding:.55rem 1rem;text-align:center;letter-spacing:.02em;
+  }
+  .preview-banner b{color:#fff;}
+
+  /* ---------- Login ---------- */
+  .login-wrap{
+    min-height:calc(100vh - 34px);display:flex;align-items:center;justify-content:center;padding:1.5rem;
+  }
+  .login-card{
+    background:var(--bg-card);border:1px solid var(--border);border-radius:1rem;
+    padding:2.25rem;width:100%;max-width:400px;box-shadow:0 10px 30px -12px rgba(30,41,59,.15);
+  }
+  .login-logo{display:flex;align-items:center;gap:.6rem;font-weight:700;font-size:1.15rem;color:var(--primary);margin-bottom:.35rem;}
+  .login-card p.sub{color:var(--text-muted);font-size:.85rem;margin-bottom:1.5rem;}
+  .form-group{margin-bottom:1rem;}
+  .form-group label{display:block;font-size:.8rem;font-weight:600;margin-bottom:.35rem;color:var(--text-main);}
+  .form-group input{
+    width:100%;padding:.65rem .8rem;border:1px solid var(--border);border-radius:.55rem;font-size:.9rem;
+  }
+  .form-group input:focus{border-color:var(--primary);}
+  .btn{
+    width:100%;background:var(--primary);color:#fff;border:none;padding:.75rem;border-radius:.55rem;
+    font-weight:600;font-size:.9rem;cursor:pointer;transition:background .15s ease;
+  }
+  .btn:hover{background:var(--primary-dark);}
+  .btn-secondary{background:var(--bg-card);color:var(--text-main);border:1px solid var(--border);}
+  .btn-secondary:hover{background:#f1f5f9;}
+  .login-error{
+    background:var(--danger-bg);color:#b91c1c;font-size:.8rem;padding:.6rem .75rem;border-radius:.5rem;margin-bottom:1rem;display:none;
+  }
+  .demo-box{
+    margin-top:1.5rem;padding-top:1.25rem;border-top:1px dashed var(--border);font-size:.76rem;color:var(--text-muted);
+  }
+  .demo-box b{color:var(--text-main);}
+  .demo-row{display:flex;justify-content:space-between;gap:.5rem;margin-top:.4rem;flex-wrap:wrap;}
+  .demo-chip{
+    background:#eef2ff;color:var(--primary-dark);border-radius:.4rem;padding:.35rem .55rem;font-size:.72rem;
+    cursor:pointer;border:none;font-weight:600;
+  }
+  .demo-chip:hover{background:#e0e7ff;}
+
+  /* ---------- Faculty shell ---------- */
+  .shell{display:flex;min-height:calc(100vh - 34px);}
+  aside{
+    width:250px;flex-shrink:0;background:var(--bg-card);border-right:1px solid var(--border);
+    display:flex;flex-direction:column;padding:1.5rem;
+  }
+  .logo{font-size:1.15rem;font-weight:700;color:var(--primary);display:flex;align-items:center;gap:.5rem;margin-bottom:2rem;}
+  .nav-links{list-style:none;display:flex;flex-direction:column;gap:.35rem;flex:1;}
+  .nav-links button{
+    display:flex;align-items:center;gap:.7rem;padding:.7rem .9rem;color:var(--text-muted);
+    background:none;border:none;text-align:left;width:100%;border-radius:.5rem;font-weight:500;font-size:.88rem;cursor:pointer;
+  }
+  .nav-links button.active,.nav-links button:hover{background:#eef2ff;color:var(--primary);}
+  .nav-logout{
+    display:flex;align-items:center;gap:.7rem;padding:.7rem .9rem;color:var(--text-muted);background:none;border:none;
+    width:100%;text-align:left;border-radius:.5rem;font-weight:500;font-size:.85rem;border-top:1px solid var(--border);
+    margin-top:.5rem;padding-top:1.1rem;cursor:pointer;
+  }
+  .nav-logout:hover{color:var(--danger);}
+  main{flex:1;padding:2rem;overflow-y:auto;max-width:100%;}
+  header.page-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.75rem;flex-wrap:wrap;gap:1rem;}
+  header.page-head h1{font-size:1.4rem;}
+  .user-profile{display:flex;align-items:center;gap:.6rem;}
+  .avatar{
+    width:38px;height:38px;border-radius:50%;background:var(--primary);color:#fff;display:flex;
+    align-items:center;justify-content:center;font-weight:700;font-size:.85rem;
+  }
+  .user-profile h4{font-size:.85rem;}
+  .user-profile span{font-size:.72rem;color:var(--text-muted);}
+
+  .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:2rem;}
+  .stat-card{background:var(--bg-card);border:1px solid var(--border);border-radius:.85rem;padding:1.25rem;}
+  .stat-card span{font-size:.78rem;color:var(--text-muted);font-weight:500;}
+  .stat-card h3{font-size:1.9rem;margin-top:.4rem;}
+
+  .card-section{background:var(--bg-card);border:1px solid var(--border);border-radius:.85rem;padding:1.5rem;margin-bottom:1.5rem;}
+  .card-section h2{font-size:1.05rem;margin-bottom:1.1rem;display:flex;align-items:center;gap:.5rem;}
+  .form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;align-items:end;}
+  .form-grid .btn{align-self:end;}
+  .portal-toggle{display:flex;align-items:center;gap:.5rem;font-size:.85rem;margin-top:1.1rem;color:var(--text-main);cursor:pointer;}
+
+  #result-card{
+    margin-top:1.25rem;padding:1.1rem;border-radius:.7rem;background:#f8fafc;border:1px solid var(--border);display:none;
+  }
+  .badge{display:inline-block;padding:.25rem .65rem;border-radius:99px;font-size:.72rem;font-weight:700;margin-bottom:.5rem;}
+  .badge-low{background:var(--success-bg);color:#047857;}
+  .badge-moderate{background:var(--warning-bg);color:#b45309;}
+  .badge-high{background:var(--danger-bg);color:#b91c1c;}
+
+  table{width:100%;border-collapse:collapse;font-size:.85rem;}
+  th{text-align:left;color:var(--text-muted);font-weight:600;padding:.6rem .5rem;border-bottom:1px solid var(--border);font-size:.75rem;text-transform:uppercase;letter-spacing:.03em;}
+  td{padding:.7rem .5rem;border-bottom:1px solid var(--border);}
+  tr:last-child td{border-bottom:none;}
+  .pill{padding:.2rem .55rem;border-radius:99px;font-size:.72rem;font-weight:600;}
+  .pill-yes{background:var(--success-bg);color:#047857;}
+  .pill-no{background:#f1f5f9;color:var(--text-muted);}
+
+  .bar-row{display:flex;align-items:center;gap:.75rem;margin-bottom:.85rem;}
+  .bar-label{width:130px;font-size:.8rem;color:var(--text-muted);flex-shrink:0;}
+  .bar-track{flex:1;height:10px;background:#f1f5f9;border-radius:99px;overflow:hidden;}
+  .bar-fill{height:100%;border-radius:99px;background:var(--primary);}
+  .bar-value{width:46px;text-align:right;font-size:.8rem;font-weight:600;}
+
+  .risk-dist{display:flex;gap:1rem;flex-wrap:wrap;}
+  .risk-dist-item{flex:1;min-width:140px;border-radius:.7rem;padding:1rem;text-align:center;}
+  .risk-dist-item h4{font-size:1.6rem;margin-bottom:.2rem;}
+  .risk-dist-item span{font-size:.78rem;font-weight:600;}
+
+  .settings-row{display:flex;justify-content:space-between;align-items:center;padding:.85rem 0;border-bottom:1px solid var(--border);font-size:.85rem;}
+  .settings-row:last-child{border-bottom:none;}
+  .settings-row .muted{color:var(--text-muted);}
+  .save-msg{color:#047857;font-size:.82rem;margin-top:.75rem;display:none;}
+
+  /* ---------- Student portal ---------- */
+  .portal-shell{min-height:calc(100vh - 34px);}
+  .portal-top{
+    background:var(--bg-card);border-bottom:1px solid var(--border);padding:1rem 2rem;
+    display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;
+  }
+  .portal-logo{font-weight:700;color:var(--primary);display:flex;align-items:center;gap:.5rem;}
+  .portal-main{max-width:840px;margin:0 auto;padding:2.5rem 1.5rem;}
+  .portal-hero{
+    border-radius:1rem;padding:1.75rem;color:#fff;margin-bottom:1.75rem;
+    background:linear-gradient(135deg,var(--primary),#7c6ef0);
+  }
+  .portal-hero h1{font-size:1.35rem;margin-bottom:.4rem;}
+  .portal-hero p{font-size:.88rem;opacity:.9;}
+  .portal-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin-bottom:1.75rem;}
+  .portal-recommend{
+    background:var(--bg-card);border:1px solid var(--border);border-radius:1rem;padding:1.5rem;
+  }
+  .portal-recommend h2{font-size:1.05rem;margin-bottom:.6rem;display:flex;align-items:center;gap:.5rem;}
+  .portal-recommend p{color:var(--text-muted);font-size:.9rem;line-height:1.6;}
+
+  @media (max-width:760px){
+    .shell{flex-direction:column;}
+    aside{width:100%;flex-direction:row;flex-wrap:wrap;padding:1rem;align-items:center;}
+    .logo{margin-bottom:0;margin-right:auto;}
+    .nav-links{flex-direction:row;flex-wrap:wrap;flex:none;}
+    .nav-logout{margin-top:0;border-top:none;padding-top:.7rem;width:auto;}
+    main{padding:1.25rem;}
+  }
+</style>
+</head>
+<body>
+
+<div class="preview-banner">
+  <i class="fa-solid fa-flask" aria-hidden="true"></i>
+  <b>Preview build</b> — runs entirely in this page with sample data. No real login, database, or password checks.
+</div>
+
+<div id="app"></div>
+
+<script>
+/* ============ Mock data (stands in for the Express + SQLite backend) ============ */
+const RISK = { LOW: 75, MODERATE: 50 };
+
+let students = [
+  { id: 1, name: "Ananya Rao",   attendance: 88, marks: 82, assignments: 90, portalEmail: "ananya.rao@school.edu" },
+  { id: 2, name: "Rahul Mehta",  attendance: 64, marks: 58, assignments: 60, portalEmail: null },
+  { id: 3, name: "Priya Nair",   attendance: 45, marks: 38, assignments: 40, portalEmail: null },
+  { id: 4, name: "Karan Singh",  attendance: 92, marks: 88, assignments: 85, portalEmail: null },
+  { id: 5, name: "Sneha Iyer",   attendance: 70, marks: 65, assignments: 55, portalEmail: "sneha.iyer@school.edu" },
+  { id: 6, name: "Vikram Desai", attendance: 55, marks: 48, assignments: 50, portalEmail: null },
+];
+let nextStudentId = 7;
+
+let users = [
+  { email: "admin@edupulse.local", password: "admin123",  role: "faculty", name: "Faculty Admin" },
+  { email: "ananya.rao@school.edu", password: "student123", role: "student", name: "Ananya Rao", studentId: 1 },
+  { email: "sneha.iyer@school.edu", password: "student123", role: "student", name: "Sneha Iyer", studentId: 5 },
+];
+
+let state = { view: "login", tab: "dashboard", currentUser: null };
+
+/* ============ Risk engine (matches the app's formula) ============ */
+function calcRisk(s){
+  const score = s.attendance * 0.3 + s.marks * 0.4 + s.assignments * 0.3;
+  if (score >= RISK.LOW) return { band: "low", label: "Low Risk", score };
+  if (score >= RISK.MODERATE) return { band: "moderate", label: "Moderate Risk", score };
+  return { band: "high", label: "High Risk", score };
+}
+function recommendation(band){
+  if (band === "low") return "Doing well overall. Keep up consistent attendance and current study habits — no intervention needed right now.";
+  if (band === "moderate") return "Some early warning signs are showing up. A short check-in with an academic advisor and a focused plan for the weaker area would help before it slips further.";
+  return "This needs attention soon. Recommend a faculty advisor meeting, a peer-tutoring referral, and weekly attendance monitoring until things stabilize.";
+}
+function initials(name){
+  return name.split(" ").map(p => p[0]).slice(0,2).join("").toUpperCase();
+}
+
+/* ============ SVG chart helpers ============ */
+const METRIC_COLORS = { attendance: "#4f46e5", marks: "#10b981", assignments: "#f59e0b" };
+const METRIC_LABELS = { attendance: "Attendance", marks: "Exam marks", assignments: "Assignments" };
+
+function polarPoint(cx, cy, r, angleDeg){
+  const rad = (angleDeg - 90) * Math.PI / 180;
+  return [cx + r * Math.cos(rad), cy + r * Math.sin(rad)];
+}
+
+/* Grouped bar chart: one group of 3 bars per student, used on faculty Analytics */
+function svgGroupedBarChart(list){
+  const padL = 34, padR = 12, padT = 12, padB = 58;
+  const groupW = 74, barW = 15, gap = 3;
+  const plotH = 190;
+  const width = padL + padR + list.length * groupW;
+  const height = padT + plotH + padB;
+  const grid = [0, 25, 50, 75, 100].map(v => {
+    const y = padT + plotH - (v / 100) * plotH;
+    return `<line x1="${padL}" y1="${y}" x2="${width - padR}" y2="${y}" stroke="#e2e8f0" stroke-width="1"/>
+            <text x="${padL - 8}" y="${y + 4}" font-size="10" fill="#94a3b8" text-anchor="end">${v}</text>`;
+  }).join("");
+
+  const bars = list.map((s, i) => {
+    const groupX = padL + i * groupW + (groupW - (barW * 3 + gap * 2)) / 2;
+    const metrics = ["attendance", "marks", "assignments"];
+    const rects = metrics.map((m, j) => {
+      const val = s[m];
+      const barH = (val / 100) * plotH;
+      const x = groupX + j * (barW + gap);
+      const y = padT + plotH - barH;
+      return `<rect x="${x}" y="${y}" width="${barW}" height="${barH}" rx="2" fill="${METRIC_COLORS[m]}">
+                <title>${s.name} — ${METRIC_LABELS[m]}: ${val}%</title>
+              </rect>`;
+    }).join("");
+    const labelX = groupX + (barW * 3 + gap * 2) / 2;
+    const labelY = padT + plotH + 14;
+    const shortName = s.name.length > 12 ? s.name.split(" ")[0] : s.name;
+    return `${rects}
+      <text x="${labelX}" y="${labelY}" font-size="10.5" fill="#64748b" text-anchor="end"
+            transform="rotate(-32 ${labelX} ${labelY})">${shortName}</text>`;
+  }).join("");
+
+  return `<svg viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" style="max-width:100%;">
+    ${grid}
+    <line x1="${padL}" y1="${padT + plotH}" x2="${width - padR}" y2="${padT + plotH}" stroke="#cbd5e1" stroke-width="1"/>
+    ${bars}
+  </svg>`;
+}
+
+/* Donut chart: risk distribution, used on faculty Analytics */
+function svgDonutChart(bands){
+  const total = bands.low + bands.moderate + bands.high;
+  const cx = 90, cy = 90, rOuter = 72, rInner = 44;
+  if (!total){
+    return `<svg viewBox="0 0 180 180" width="180" height="180">
+      <circle cx="${cx}" cy="${cy}" r="${rOuter}" fill="none" stroke="#e2e8f0" stroke-width="${rOuter-rInner}"/>
+      <text x="${cx}" y="${cy+4}" text-anchor="middle" font-size="12" fill="#94a3b8">No data</text>
+    </svg>`;
+  }
+  const segments = [
+    { value: bands.low, color: "#10b981" },
+    { value: bands.moderate, color: "#f59e0b" },
+    { value: bands.high, color: "#ef4444" },
+  ];
+  let angle = 0;
+  const paths = segments.filter(s => s.value > 0).map(seg => {
+    const sweep = (seg.value / total) * 360;
+    const start = angle;
+    const end = angle + sweep;
+    angle = end;
+    const [x1, y1] = polarPoint(cx, cy, rOuter, start);
+    const [x2, y2] = polarPoint(cx, cy, rOuter, end);
+    const [x3, y3] = polarPoint(cx, cy, rInner, end);
+    const [x4, y4] = polarPoint(cx, cy, rInner, start);
+    const large = sweep > 180 ? 1 : 0;
+    // full circle edge case
+    if (sweep >= 359.99){
+      return `<circle cx="${cx}" cy="${cy}" r="${(rOuter+rInner)/2}" fill="none" stroke="${seg.color}" stroke-width="${rOuter-rInner}"/>`;
+    }
+    return `<path d="M ${x1} ${y1} A ${rOuter} ${rOuter} 0 ${large} 1 ${x2} ${y2}
+                     L ${x3} ${y3} A ${rInner} ${rInner} 0 ${large} 0 ${x4} ${y4} Z" fill="${seg.color}"/>`;
+  }).join("");
+
+  return `<svg viewBox="0 0 180 180" width="180" height="180">
+    ${paths}
+    <text x="${cx}" y="${cy-2}" text-anchor="middle" font-size="22" font-weight="700" fill="#1e293b">${total}</text>
+    <text x="${cx}" y="${cy+16}" text-anchor="middle" font-size="10.5" fill="#64748b">students</text>
+  </svg>`;
+}
+
+/* Single-student 3-bar chart, used on the student portal */
+function svgStudentBarChart(s){
+  const padL = 34, padR = 12, padT = 12, padB = 34;
+  const plotH = 160, barW = 46, gap = 26;
+  const width = padL + padR + 3 * barW + 2 * gap;
+  const height = padT + plotH + padB;
+  const grid = [0, 25, 50, 75, 100].map(v => {
+    const y = padT + plotH - (v / 100) * plotH;
+    return `<line x1="${padL}" y1="${y}" x2="${width - padR}" y2="${y}" stroke="#e2e8f0" stroke-width="1"/>
+            <text x="${padL - 8}" y="${y + 4}" font-size="10" fill="#94a3b8" text-anchor="end">${v}</text>`;
+  }).join("");
+  const metrics = ["attendance", "marks", "assignments"];
+  const bars = metrics.map((m, i) => {
+    const val = s[m];
+    const barH = (val / 100) * plotH;
+    const x = padL + i * (barW + gap);
+    const y = padT + plotH - barH;
+    const labelX = x + barW / 2;
+    return `<rect x="${x}" y="${y}" width="${barW}" height="${barH}" rx="3" fill="${METRIC_COLORS[m]}"/>
+      <text x="${labelX}" y="${y - 6}" text-anchor="middle" font-size="11" font-weight="700" fill="#1e293b">${val}%</text>
+      <text x="${labelX}" y="${padT + plotH + 18}" text-anchor="middle" font-size="10.5" fill="#64748b">${METRIC_LABELS[m]}</text>`;
+  }).join("");
+
+  return `<svg viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" style="max-width:100%;">
+    ${grid}
+    <line x1="${padL}" y1="${padT + plotH}" x2="${width - padR}" y2="${padT + plotH}" stroke="#cbd5e1" stroke-width="1"/>
+    ${bars}
+  </svg>`;
+}
+
+function chartLegend(items){
+  return `<div style="display:flex;gap:1.1rem;flex-wrap:wrap;margin-top:.9rem;">
+    ${items.map(it => `
+      <div style="display:flex;align-items:center;gap:.4rem;font-size:.78rem;color:var(--text-muted);">
+        <span style="width:10px;height:10px;border-radius:3px;background:${it.color};display:inline-block;"></span>${it.label}
+      </div>`).join("")}
+  </div>`;
+}
+
+/* ============ Render dispatch ============ */
+function render(){
+  const app = document.getElementById("app");
+  if (state.view === "login") app.innerHTML = renderLogin();
+  else if (state.view === "faculty") app.innerHTML = renderFacultyShell();
+  else if (state.view === "portal") app.innerHTML = renderPortal();
+}
+
+/* ============ Login ============ */
+function renderLogin(){
+  return `
+  <div class="login-wrap">
+    <div class="login-card">
+      <div class="login-logo"><i class="fa-solid fa-graduation-cap"></i> EduPulse AI</div>
+      <p class="sub">Sign in as faculty or as a student to see each portal.</p>
+      <div class="login-error" id="loginError">That email/password combination doesn't match a preview account.</div>
+      <form onsubmit="return handleLogin(event)">
+        <div class="form-group">
+          <label for="loginEmail">Email</label>
+          <input id="loginEmail" type="email" placeholder="you@school.edu" required>
+        </div>
+        <div class="form-group">
+          <label for="loginPassword">Password</label>
+          <input id="loginPassword" type="password" placeholder="••••••••" required>
+        </div>
+        <button class="btn" type="submit">Log in</button>
+      </form>
+      <div class="demo-box">
+        <b>Demo accounts</b> — click one to autofill it.
+        <div class="demo-row">
+          <button class="demo-chip" onclick="fillDemo('admin@edupulse.local','admin123')"><i class="fa-solid fa-chalkboard-user"></i> Faculty admin</button>
+          <button class="demo-chip" onclick="fillDemo('ananya.rao@school.edu','student123')"><i class="fa-solid fa-user"></i> Ananya (student)</button>
+          <button class="demo-chip" onclick="fillDemo('sneha.iyer@school.edu','student123')"><i class="fa-solid fa-user"></i> Sneha (student)</button>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+function fillDemo(email, pw){
+  document.getElementById("loginEmail").value = email;
+  document.getElementById("loginPassword").value = pw;
+}
+function handleLogin(e){
+  e.preventDefault();
+  const email = document.getElementById("loginEmail").value.trim().toLowerCase();
+  const pw = document.getElementById("loginPassword").value;
+  const user = users.find(u => u.email.toLowerCase() === email && u.password === pw);
+  if (!user){
+    document.getElementById("loginError").style.display = "block";
+    return false;
+  }
+  state.currentUser = user;
+  state.view = user.role === "faculty" ? "faculty" : "portal";
+  state.tab = "dashboard";
+  render();
+  return false;
+}
+function logout(){
+  state.currentUser = null;
+  state.view = "login";
+  render();
+}
+
+/* ============ Faculty shell ============ */
+function renderFacultyShell(){
+  const u = state.currentUser;
+  const tabs = [
+    { id: "dashboard", label: "Dashboard", icon: "fa-house" },
+    { id: "students", label: "Students", icon: "fa-users" },
+    { id: "analytics", label: "Analytics", icon: "fa-chart-line" },
+    { id: "settings", label: "Settings", icon: "fa-gear" },
+  ];
+  const navHtml = tabs.map(t => `
+    <button class="${state.tab === t.id ? "active" : ""}" onclick="setTab('${t.id}')">
+      <i class="fa-solid ${t.icon}"></i> ${t.label}
+    </button>`).join("");
+
+  let bodyHtml = "";
+  if (state.tab === "dashboard") bodyHtml = renderDashboard();
+  else if (state.tab === "students") bodyHtml = renderStudents();
+  else if (state.tab === "analytics") bodyHtml = renderAnalytics();
+  else if (state.tab === "settings") bodyHtml = renderSettings();
+
+  return `
+  <div class="shell">
+    <aside>
+      <div class="logo"><i class="fa-solid fa-graduation-cap"></i> EduPulse AI</div>
+      <ul class="nav-links" style="list-style:none;">${navHtml}</ul>
+      <button class="nav-logout" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Log out</button>
+    </aside>
+    <main>${bodyHtml}</main>
+  </div>`;
+}
+function setTab(tab){ state.tab = tab; render(); }
+
+function headOf(title){
+  const u = state.currentUser;
+  return `
+  <header class="page-head">
+    <h1>${title}</h1>
+    <div class="user-profile">
+      <div class="avatar">${initials(u.name)}</div>
+      <div><h4>${u.name}</h4><span>Faculty Admin</span></div>
+    </div>
+  </header>`;
+}
+
+/* ---- Dashboard ---- */
+function renderDashboard(){
+  const total = students.length;
+  const atRisk = students.filter(s => calcRisk(s).band !== "low").length;
+  const avgAtt = total ? Math.round(students.reduce((a,s)=>a+s.attendance,0)/total) : 0;
+
+  return `
+  ${headOf("Early-Warning Dashboard")}
+  <div class="stats-grid">
+    <div class="stat-card"><span>Total Monitored Students</span><h3>${total}</h3></div>
+    <div class="stat-card"><span>At-Risk Students</span><h3 style="color:var(--danger)">${atRisk}</h3></div>
+    <div class="stat-card"><span>Average Attendance</span><h3>${avgAtt}%</h3></div>
+  </div>
+  <section class="card-section">
+    <h2><i class="fa-solid fa-wand-magic-sparkles" style="color:var(--primary)"></i> AI Risk & Recommendation Engine</h2>
+    <div class="form-grid">
+      <div class="form-group"><label>Student Name</label><input id="evName" placeholder="e.g. Alex Smith"></div>
+      <div class="form-group"><label>Attendance (%)</label><input id="evAttendance" type="number" min="0" max="100" placeholder="e.g. 75"></div>
+      <div class="form-group"><label>Exam Marks (%)</label><input id="evMarks" type="number" min="0" max="100" placeholder="e.g. 60"></div>
+      <div class="form-group"><label>Assignments Done (%)</label><input id="evAssignments" type="number" min="0" max="100" placeholder="e.g. 50"></div>
+      <button class="btn" onclick="evaluateStudent()">Evaluate risk</button>
+    </div>
+    <label class="portal-toggle">
+      <input type="checkbox" id="createPortalToggle" onchange="document.getElementById('portalFields').style.display=this.checked?'grid':'none'">
+      Also set up portal access so this student can log in and see their own progress
+    </label>
+    <div class="form-grid" id="portalFields" style="display:none;margin-top:.75rem;">
+      <div class="form-group"><label>Student Email</label><input id="evPortalEmail" type="email" placeholder="student@school.edu"></div>
+      <div class="form-group"><label>Portal Password</label><input id="evPortalPassword" type="password" placeholder="min. 6 characters"></div>
+    </div>
+    <div id="result-card">
+      <div id="riskBadge" class="badge"></div>
+      <h3 id="resTitle" style="margin-bottom:.4rem;"></h3>
+      <p id="resRecommendation" style="color:var(--text-muted);line-height:1.5;"></p>
+    </div>
+  </section>`;
+}
+function evaluateStudent(){
+  const name = document.getElementById("evName").value.trim();
+  const attendance = Number(document.getElementById("evAttendance").value);
+  const marks = Number(document.getElementById("evMarks").value);
+  const assignments = Number(document.getElementById("evAssignments").value);
+  if (!name || [attendance,marks,assignments].some(v => Number.isNaN(v))){
+    alert("Fill in a name, attendance, marks, and assignments first.");
+    return;
+  }
+  const risk = calcRisk({attendance, marks, assignments});
+
+  // create or update the student record, mirroring what the real evaluator does
+  let existing = students.find(s => s.name.toLowerCase() === name.toLowerCase());
+  if (existing){
+    Object.assign(existing, {attendance, marks, assignments});
+  } else {
+    existing = { id: nextStudentId++, name, attendance, marks, assignments, portalEmail: null };
+    students.push(existing);
+  }
+
+  if (document.getElementById("createPortalToggle").checked){
+    const email = document.getElementById("evPortalEmail").value.trim();
+    const pw = document.getElementById("evPortalPassword").value;
+    if (email && pw.length >= 6){
+      users = users.filter(u => u.studentId !== existing.id);
+      users.push({ email, password: pw, role: "student", name: existing.name, studentId: existing.id });
+      existing.portalEmail = email;
+    }
+  }
+
+  const card = document.getElementById("result-card");
+  card.style.display = "block";
+  const badge = document.getElementById("riskBadge");
+  badge.className = "badge badge-" + risk.band;
+  badge.textContent = risk.label;
+  document.getElementById("resTitle").textContent = `${name} — composite score ${Math.round(risk.score)}`;
+  document.getElementById("resRecommendation").textContent = recommendation(risk.band);
+}
+
+/* ---- Students directory ---- */
+function renderStudents(){
+  const rows = students.map(s => {
+    const r = calcRisk(s);
+    return `<tr>
+      <td>${s.name}</td>
+      <td>${s.attendance}%</td>
+      <td>${s.marks}%</td>
+      <td>${s.assignments}%</td>
+      <td><span class="badge badge-${r.band}" style="margin:0;">${r.label}</span></td>
+      <td><span class="pill ${s.portalEmail ? "pill-yes" : "pill-no"}">${s.portalEmail ? "Enabled" : "None"}</span></td>
+    </tr>`;
+  }).join("");
+
+  return `
+  ${headOf("Student Directory")}
+  <section class="card-section">
+    <h2><i class="fa-solid fa-users" style="color:var(--primary)"></i> All monitored students</h2>
+    <table>
+      <thead><tr><th>Name</th><th>Attendance</th><th>Marks</th><th>Assignments</th><th>Risk</th><th>Portal access</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+  </section>`;
+}
+
+/* ---- Analytics (computed from live data, not placeholders) ---- */
+function renderAnalytics(){
+  const n = students.length || 1;
+  const avgAtt = students.reduce((a,s)=>a+s.attendance,0)/n;
+  const avgMarks = students.reduce((a,s)=>a+s.marks,0)/n;
+  const avgAssign = students.reduce((a,s)=>a+s.assignments,0)/n;
+
+  const bands = { low: 0, moderate: 0, high: 0 };
+  students.forEach(s => bands[calcRisk(s).band]++);
+
+  const bar = (label, value) => `
+    <div class="bar-row">
+      <div class="bar-label">${label}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${Math.min(value,100)}%"></div></div>
+      <div class="bar-value">${Math.round(value)}%</div>
+    </div>`;
+
+  return `
+  ${headOf("Analytics")}
+  <section class="card-section">
+    <h2><i class="fa-solid fa-chart-line" style="color:var(--primary)"></i> Class averages</h2>
+    ${bar("Attendance", avgAtt)}
+    ${bar("Exam marks", avgMarks)}
+    ${bar("Assignments", avgAssign)}
+  </section>
+  <section class="card-section">
+    <h2><i class="fa-solid fa-chart-simple" style="color:var(--primary)"></i> Performance by student</h2>
+    <div style="overflow-x:auto;">${svgGroupedBarChart(students)}</div>
+    ${chartLegend([
+      {color: METRIC_COLORS.attendance, label: "Attendance"},
+      {color: METRIC_COLORS.marks, label: "Exam marks"},
+      {color: METRIC_COLORS.assignments, label: "Assignments"},
+    ])}
+  </section>
+  <section class="card-section">
+    <h2><i class="fa-solid fa-triangle-exclamation" style="color:var(--primary)"></i> Risk distribution</h2>
+    <div style="display:flex;gap:2rem;align-items:center;flex-wrap:wrap;">
+      ${svgDonutChart(bands)}
+      <div class="risk-dist" style="flex:1;min-width:220px;">
+        <div class="risk-dist-item" style="background:var(--success-bg);"><h4 style="color:#047857;">${bands.low}</h4><span style="color:#047857;">Low risk</span></div>
+        <div class="risk-dist-item" style="background:var(--warning-bg);"><h4 style="color:#b45309;">${bands.moderate}</h4><span style="color:#b45309;">Moderate risk</span></div>
+        <div class="risk-dist-item" style="background:var(--danger-bg);"><h4 style="color:#b91c1c;">${bands.high}</h4><span style="color:#b91c1c;">High risk</span></div>
+      </div>
+    </div>
+  </section>`;
+}
+
+/* ---- Settings ---- */
+function renderSettings(){
+  return `
+  ${headOf("Settings")}
+  <section class="card-section">
+    <h2><i class="fa-solid fa-lock" style="color:var(--primary)"></i> Change password</h2>
+    <div class="form-grid" style="grid-template-columns:1fr 1fr;">
+      <div class="form-group"><label>Current password</label><input id="curPw" type="password"></div>
+      <div class="form-group"><label>New password</label><input id="newPw" type="password"></div>
+    </div>
+    <button class="btn" style="width:auto;padding:.65rem 1.5rem;" onclick="changePassword()">Save password</button>
+    <p class="save-msg" id="pwSaved"><i class="fa-solid fa-circle-check"></i> Password updated for this session.</p>
+  </section>
+  <section class="card-section">
+    <h2><i class="fa-solid fa-sliders" style="color:var(--primary)"></i> Risk thresholds</h2>
+    <div class="settings-row"><span>Low risk</span><span class="muted">score ≥ ${RISK.LOW}</span></div>
+    <div class="settings-row"><span>Moderate risk</span><span class="muted">score ${RISK.MODERATE}–${RISK.LOW - 1}</span></div>
+    <div class="settings-row"><span>High risk</span><span class="muted">score &lt; ${RISK.MODERATE}</span></div>
+    <p style="font-size:.78rem;color:var(--text-muted);margin-top:.85rem;">Display-only for now — matches the real app, which doesn't let these be edited yet either.</p>
+  </section>`;
+}
+function changePassword(){
+  const cur = document.getElementById("curPw").value;
+  const next = document.getElementById("newPw").value;
+  if (cur !== state.currentUser.password){
+    alert("Current password doesn't match.");
+    return;
+  }
+  if (next.length < 6){
+    alert("New password should be at least 6 characters.");
+    return;
+  }
+  state.currentUser.password = next;
+  document.getElementById("pwSaved").style.display = "block";
+  document.getElementById("curPw").value = "";
+  document.getElementById("newPw").value = "";
+}
+
+/* ============ Student portal ============ */
+function renderPortal(){
+  const u = state.currentUser;
+  const s = students.find(st => st.id === u.studentId);
+  const r = calcRisk(s);
+
+  return `
+  <div class="portal-shell">
+    <div class="portal-top">
+      <div class="portal-logo"><i class="fa-solid fa-graduation-cap"></i> EduPulse AI — My Progress</div>
+      <button class="btn btn-secondary" style="width:auto;padding:.5rem 1rem;" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Log out</button>
+    </div>
+    <div class="portal-main">
+      <div class="portal-hero">
+        <h1>Welcome back, ${s.name.split(" ")[0]}</h1>
+        <p>Here's where things stand right now, based on your attendance, marks, and assignments.</p>
+      </div>
+      <div class="portal-stats">
+        <div class="stat-card"><span>Attendance</span><h3>${s.attendance}%</h3></div>
+        <div class="stat-card"><span>Exam marks</span><h3>${s.marks}%</h3></div>
+        <div class="stat-card"><span>Assignments done</span><h3>${s.assignments}%</h3></div>
+      </div>
+      <div class="portal-recommend" style="margin-bottom:1.75rem;">
+        <h2><i class="fa-solid fa-chart-simple" style="color:var(--primary)"></i> Your performance</h2>
+        <div style="overflow-x:auto;">${svgStudentBarChart(s)}</div>
+      </div>
+      <div class="portal-recommend">
+        <h2><i class="fa-solid fa-lightbulb" style="color:var(--primary)"></i> Your status</h2>
+        <span class="badge badge-${r.band}">${r.label}</span>
+        <p>${recommendation(r.band)}</p>
+      </div>
+    </div>
+  </div>`;
+}
+
+render();
+</script>
+</body>
+</html>

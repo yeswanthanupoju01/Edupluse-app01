@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics - EduPulse AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <aside>
+        <div class="logo">
+            <i class="fa-solid fa-graduation-cap"></i> EduPulse AI
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html"><i class="fa-solid fa-house"></i> Dashboard</a></li>
+            <li><a href="students.html"><i class="fa-solid fa-users"></i> Students</a></li>
+            <li><a href="analytics.html" class="active"><i class="fa-solid fa-chart-line"></i> Analytics</a></li>
+            <li><a href="settings.html"><i class="fa-solid fa-gear"></i> Settings</a></li>
+        </ul>
+        <a href="#" id="logoutLink" class="nav-logout"><i class="fa-solid fa-right-from-bracket"></i> Log out</a>
+    </aside>
+
+    <main>
+        <header>
+            <h1>System Analytics</h1>
+            <div class="user-profile">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100" alt="Admin">
+                <div>
+                    <h4 id="userName" style="font-size: 0.875rem;">—</h4>
+                    <span style="font-size: 0.75rem; color: var(--text-muted);">Faculty Admin</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <span>Overall Term Passing Rate</span>
+                <h3 style="color: var(--success);">88.6%</h3>
+            </div>
+            <div class="stat-card">
+                <span>Avg Assignment Completion</span>
+                <h3>79.2%</h3>
+            </div>
+            <div class="stat-card">
+                <span>Critical Risk Alerts Sent</span>
+                <h3 style="color: var(--danger);">45</h3>
+            </div>
+        </div>
+        <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: -1rem;">
+            These three figures are illustrative placeholders — say the word if you want them computed from real student records like the Dashboard cards are.
+        </p>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

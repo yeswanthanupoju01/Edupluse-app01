@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - EduPulse AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <aside>
+        <div class="logo">
+            <i class="fa-solid fa-graduation-cap"></i> EduPulse AI
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html"><i class="fa-solid fa-house"></i> Dashboard</a></li>
+            <li><a href="students.html"><i class="fa-solid fa-users"></i> Students</a></li>
+            <li><a href="analytics.html"><i class="fa-solid fa-chart-line"></i> Analytics</a></li>
+            <li><a href="settings.html" class="active"><i class="fa-solid fa-gear"></i> Settings</a></li>
+        </ul>
+        <a href="#" id="logoutLink" class="nav-logout"><i class="fa-solid fa-right-from-bracket"></i> Log out</a>
+    </aside>
+
+    <main>
+        <header>
+            <h1>System Settings</h1>
+            <div class="user-profile">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100" alt="Admin">
+                <div>
+                    <h4 id="userName" style="font-size: 0.875rem;">—</h4>
+                    <span style="font-size: 0.75rem; color: var(--text-muted);">Faculty Admin</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="evaluator-section">
+            <h2>Threshold Configuration</h2>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>At-Risk Score Threshold (%)</label>
+                    <input type="number" value="50" disabled>
+                </div>
+                <div class="form-group">
+                    <label>Warning Score Threshold (%)</label>
+                    <input type="number" value="75" disabled>
+                </div>
+                <button disabled title="Not wired up yet — ask and I'll connect this to the risk engine">Save Settings</button>
+            </div>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 1rem;">
+                These reflect the thresholds the risk engine currently uses. Making them actually editable means the server needs to read them before scoring instead of using fixed numbers — happy to wire that up if useful.
+            </p>
+        </div>
+
+        <div class="evaluator-section" style="margin-top: 1.5rem;">
+            <h2>Change Password</h2>
+            <form id="passwordForm" class="form-grid">
+                <div class="form-group">
+                    <label>Current Password</label>
+                    <input type="password" id="currentPassword" required>
+                </div>
+                <div class="form-group">
+                    <label>New Password</label>
+                    <input type="password" id="newPassword" required minlength="6">
+                </div>
+                <button type="submit">Update Password</button>
+            </form>
+            <p id="passwordMsg" style="font-size: 0.85rem; margin-top: 0.75rem;"></p>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

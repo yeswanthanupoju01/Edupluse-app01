@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Progress - EduPulse AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="portal-body">
+    <div class="portal-wrap">
+        <header class="portal-header">
+            <div class="logo">
+                <i class="fa-solid fa-graduation-cap"></i> EduPulse AI
+            </div>
+            <div class="user-profile">
+                <div style="text-align: right;">
+                    <h4 id="portalUserName" style="font-size: 0.9rem;">—</h4>
+                    <span style="font-size: 0.75rem; color: var(--text-muted);">Student</span>
+                </div>
+                <button id="logoutBtn" class="logout-btn" title="Log out"><i class="fa-solid fa-right-from-bracket"></i></button>
+            </div>
+        </header>
+
+        <main class="portal-main">
+            <h1 id="portalGreeting">Welcome back</h1>
+            <p class="portal-lede">Here's how things are looking right now. This updates as your teacher records new attendance, marks, and assignments.</p>
+
+            <div id="portalContent">
+                <p style="color: var(--text-muted);">Loading your progress…</p>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
